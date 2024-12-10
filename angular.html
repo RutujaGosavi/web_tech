@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+ 
+<html lang="en" ng-app="todoApp">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+</head>
+
+<body ng-controller="TodoCtrl">
+    <div>
+        <h1>MY TO-DO LIST</h1>
+        <h4>Task to complete</h4><br>
+        <input type="text" ng-model="newTodo" placeholder="Add task">
+        <button ng-click="addTodo()">Submit</button>
+    </div>
+
+    <table border="2">
+
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat="todo in todos">
+                <td>
+                    <input type="text" ng-model="todo.text" ng-disabled="!todo.isEditing" />
+                </td>
+                <td>
+                    <button ng-click="editTodo(todo)">
+                        {{todo.isEditing ? 'Save' : 'Edit'}}
+                    </button>
+                </td>
+                <td>
+                    <button ng-click="deleteTodo(todo)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <script>
+
+        angular.module('todoApp', [])
+            .controller('TodoCtrl', function($scope) {
+                $scope.todos = [];
+
+                // Add a new todo item
+                $scope.addTodo = function() {
+                    if ($scope.newTodo) {
+                        $scope.todos.push({text: $scope.newTodo, isEditing: false});
+                        $scope.newTodo = '';
+                    }
+                };
+
+                // Delete a todo item
+                $scope.deleteTodo = function(todo) {
+                    const index = $scope.todos.indexOf(todo);
+                    if (index > -1) $scope.todos.splice(index, 1);
+                };
+
+                // Toggle edit mode for the todo item
+                $scope.editTodo = function(todo) {
+                    if (todo.isEditing) {
+                        // If the task was being edited and Save was clicked, no additional actions needed
+                    }
+                    // Toggle the edit state
+                    todo.isEditing = !todo.isEditing;
+                };
+            });
+
+    </script>
+</body>
+</html>
